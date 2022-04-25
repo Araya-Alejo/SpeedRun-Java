@@ -10,6 +10,7 @@ public class EstadoAlumno {
     static ArrayList<Nota> recuperatorio = new ArrayList();
     static ArrayList<Nota> notasFinales = new ArrayList();
     static Alumno alumno = new Alumno();
+    static double promedio;
 
     public static void main(String[] args) {
 
@@ -21,20 +22,56 @@ public class EstadoAlumno {
         ingresarNotas_Recuperatorio();
         alumno.setNotasRecuperatorios(recuperatorio);
 
-        rellenarNotasFinales();
+        agregarNotasFinales();
         alumno.setNotasFinales(notasFinales);
 
-        saltoDeLinea();
-        double promedio = calcularPromedio();
-        System.out.println(promedio);
+        estadoDelAlumno();
 
-//        for (int i = 0; i < notasFinales.size(); i++) {
-//            boolean libre = notasFinales.get(i).equals("A"); // ALUMNO LIBRE
-//
-//            if (promedio == ) {
-//                
-//            }
-//        }
+        MOSTRAR_DATOS_ALUMNO();
+    }
+
+    public static void estadoDelAlumno() {
+        if (validarLibre()) {
+            alumno.setEstado("LIBRE");
+        } else {
+            promedio = calcularPromedio();
+
+            if (promedio < 4.0) {
+                alumno.setEstado("LIBRE");
+            } else if (promedio >= 4.0 && promedio < 6.0) {
+                alumno.setEstado("REGULAR");
+            } else if (promedio > 6.0) {
+                alumno.setEstado("PROMOCIONADO");
+            } else {
+                System.out.println("ERROR DE VALIDACION.");
+            }
+        }
+    }
+
+    public static void MOSTRAR_DATOS_ALUMNO() {
+        saltoDeLinea();
+        System.out.println("Alumno: " + alumno.getNombreCompleto());
+        System.out.println("Legajo: " + alumno.getLegajo());
+
+        System.out.println("Notas finales:");
+
+        System.out.print("[ ");
+        for (Nota n : notasFinales) {
+            System.out.print(n.getValorNota() + ", ");
+        }
+        System.out.println(" ]");
+
+        System.out.print("El promedio de las notas es:" + promedio + " --> estas " + alumno.getEstado());
+        saltoDeLinea();
+        saltoDeLinea();
+    }
+
+    public static boolean validarLibre() {
+        boolean libre = false;
+        for (int i = 0; i < notasFinales.size(); i++) {
+            libre = notasFinales.get(i).equals("A"); // ALUMNO LIBRE
+        }
+        return libre;
     }
 
     public static void saltoDeLinea() {
@@ -51,14 +88,14 @@ public class EstadoAlumno {
         return promedio;
     }
 
-    public static void rellenarNotasFinales() {
+    public static void agregarNotasFinales() {
         for (int i = 0; i < recuperatorio.size(); i++) {
             notasFinales.add(alumno.getNotasRecuperatorios().get(i));
         }
 
         for (int i = 0; i < notas.size(); i++) {
 
-            if (!alumno.getNotas().get(i).getValorNota().equals("A") || !alumno.getNotas().get(i).getValorNota().equals("N") || !alumno.getNotas().get(i).getValorNota().equals("1") || !alumno.getNotas().get(i).getValorNota().equals("2") || !alumno.getNotas().get(i).getValorNota().equals("3") || !alumno.getNotas().get(i).getValorNota().equals("4") || !alumno.getNotas().get(i).getValorNota().equals("5")) {
+            if (!alumno.getNotas().get(i).getValorNota().equals("A") && !alumno.getNotas().get(i).getValorNota().equals("N") && !alumno.getNotas().get(i).getValorNota().equals("1") && !alumno.getNotas().get(i).getValorNota().equals("2") && !alumno.getNotas().get(i).getValorNota().equals("3") && !alumno.getNotas().get(i).getValorNota().equals("4") && !alumno.getNotas().get(i).getValorNota().equals("5")) {
                 notasFinales.add(alumno.getNotas().get(i));
             }
 
